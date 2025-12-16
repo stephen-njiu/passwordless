@@ -1,6 +1,6 @@
 "use server";
 
-import { getAvailableProviders, type Provider } from "@/lib/available-providers";
+import { getAvailableProviders, isMagicLinkEnabled, type Provider } from "@/lib/available-providers";
 
 /**
  * Server action to get available OAuth providers
@@ -8,4 +8,11 @@ import { getAvailableProviders, type Provider } from "@/lib/available-providers"
  */
 export async function getConfiguredProviders(): Promise<Provider[]> {
   return getAvailableProviders();
+}
+
+/**
+ * Server action to check if magic link is enabled
+ */
+export async function getMagicLinkStatus(): Promise<boolean> {
+  return isMagicLinkEnabled();
 }

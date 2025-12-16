@@ -1,16 +1,17 @@
 # CV99X - Premium Authentication Template
 
-A Next.js 15 authentication system with **passwordless magic link** and **dynamic social OAuth providers**, styled with a futuristic CV99X premium theme.
+A Next.js 15+ authentication system with **optional passwordless magic link** and **dynamic social OAuth providers**, styled with a futuristic CV99X premium theme.
 
 ## 🚀 Features
 
-- **Passwordless Authentication** - Magic link sign-in via email (powered by Resend)
+- **Optional Passwordless Authentication** - Toggle magic link sign-in via email (powered by Resend) with a simple env variable
 - **Dynamic Social OAuth** - Automatically detects configured providers from `.env`
+- **Flexible Configuration** - Use magic link only, social OAuth only, or both together
 - **13 OAuth Providers Supported**:
   - GitHub, Google, LinkedIn, Twitter/X
   - Facebook, Discord, Microsoft, Apple
   - Spotify, Twitch, GitLab, TikTok, Dropbox
-- **Protected Routes** - Middleware automatically guards pages
+- **Protected Routes** - Proxy automatically guards pages
 - **Premium UI** - Dark theme with neon accents, animated backgrounds, Framer Motion
 - **Database** - Prisma + Neon (PostgreSQL)
 - **Type-Safe** - Full TypeScript support
@@ -51,17 +52,25 @@ DATABASE_URL="postgresql://username:password@host/database?sslmode=require"
 # BETTER AUTH (Required)
 # ===================================
 BETTER_AUTH_SECRET="your-secret-key-at-least-32-characters-long"
-BETTER_AUTH_URL="http://localhost:3000"  # Change to your domain in production
+NEXT_PUBLIC_BASE_URL="http://localhost:3000"  # Change to your domain in production
 
 # ===================================
-# EMAIL (Required for Magic Link)
+# MAGIC LINK (Optional - Enable/Disable Email Authentication)
+# ===================================
+# Set to "TRUE" to enable magic link email authentication
+# Set to "FALSE" to disable (will only use social OAuth)
+MAGIC_LINK="TRUE"
+
+# ===================================
+# EMAIL (Required ONLY if MAGIC_LINK="TRUE")
 # ===================================
 # Get from: https://resend.com/api-keys
 RESEND_API_KEY="re_xxxxxxxxxxxxx"
 SEND_EMAIL_FROM="support@cv99x.com"  # Use your verified domain
+Change logo.png  in /public/logo.png to your custom logo.
 
 # ===================================
-# OAUTH PROVIDERS (Optional - Add any you want)
+# OAUTH PROVIDERS (At least one required, especially Google as baseline)
 # ===================================
 
 # GitHub OAuth
@@ -141,8 +150,7 @@ npx prisma generate
 # Run database migrations
 npx prisma migrate dev --name init
 
-# (Optional) Open Prisma Studio to view data
-npx prisma studio
+
 ```
 
 ### 4. Run Development Server
@@ -157,14 +165,25 @@ Visit [http://localhost:3000/auth/sign](http://localhost:3000/auth/sign)
 
 ## 🔐 How Authentication Works
 
-### Magic Link (Email)
+### Magic Link (Email) - Optional
+
+**Enable by setting `MAGIC_LINK="TRUE"` in your `.env` file.**
+
+When enabled:
 
 1. User enters their email
 2. System sends a magic link via Resend
 3. User clicks link → automatically signed in
 4. No password required!
 
-### Social OAuth (Dynamic)
+When disabled (`MAGIC_LINK="FALSE"` or not set):
+
+- Magic link form is hidden
+- Only social OAuth buttons are shown
+
+### Social OAuth (Dynamic) - Baseline
+
+**Google OAuth is recommended as the baseline.** At least one OAuth provider should be configured.
 
 The system **automatically detects** which OAuth providers you've configured in `.env`:
 
@@ -173,6 +192,14 @@ The system **automatically detects** which OAuth providers you've configured in 
 - Remove credentials → button disappears automatically
 
 **No code changes needed!** Just update `.env` and restart the server.
+
+### Configuration Options
+
+You can configure authentication in three ways:
+
+1. **Magic Link Only**: Set `MAGIC_LINK="TRUE"` with no OAuth providers
+2. **Social OAuth Only**: Set `MAGIC_LINK="FALSE"` with OAuth providers configured (recommended: Google as baseline)
+3. **Both**: Set `MAGIC_LINK="TRUE"` with OAuth providers configured (most flexible)
 
 ---
 
@@ -205,7 +232,7 @@ For detailed provider setup instructions, see [SOCIAL_AUTH_PROVIDERS.md](./SOCIA
 
 ## 🛡️ Protected Routes
 
-The middleware automatically:
+The Proxy automatically:
 
 - ✅ **Protects `/profile`** - Redirects unauthenticated users to `/auth/sign`
 - ✅ **Guards `/auth/sign`** - Redirects authenticated users to `/profile`
@@ -272,7 +299,7 @@ Modify colors in `app/globals.css` and component files.
 ### 1. Update Environment Variables
 
 ```env
-BETTER_AUTH_URL="https://yourdomain.com"
+NEXT_PUBLIC_BASE_URL="https://yourdomain.com"
 SEND_EMAIL_FROM="noreply@yourdomain.com"  # Use your verified domain
 ```
 

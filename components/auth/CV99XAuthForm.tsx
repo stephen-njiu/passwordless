@@ -12,9 +12,11 @@ import { motion } from "motion/react";
 import type { Provider } from "@/lib/available-providers";
 
 export default function CV99XAuthForm({ 
-  availableProviders 
+  availableProviders,
+  magicLinkEnabled = true
 }: { 
-  availableProviders: Provider[] 
+  availableProviders: Provider[];
+  magicLinkEnabled?: boolean;
 }) {
   const [loading, setLoading] = useState(false);
   const [socialBusy, setSocialBusy] = useState(false);
@@ -45,13 +47,13 @@ export default function CV99XAuthForm({
         {
           onRequest: () => {
             tid = toast.loading("Sending magic link...", {
-              icon: <Loader2 className="size-4 animate-spin text-fuchsia-400" />,
+              icon: <Loader2 className="size-4 animate-spin text-fuchsia-700" />,
             });
           },
           onSuccess: () => {
             toast.success(
               <span className="flex items-center gap-2">
-                <Sparkles className="size-4 text-fuchsia-400" />
+                <Sparkles className="size-4 text-fuchsia-500" />
                 Check your inbox! Magic link sent.
               </span>,
               { id: tid }
@@ -121,70 +123,83 @@ export default function CV99XAuthForm({
                 providers={availableProviders}
               />
 
-              {/* Divider */}
-              <div className="flex items-center gap-3">
-                <span className="h-px flex-1 bg-linear-to-r from-transparent via-purple-500/30 to-transparent" />
-                <span className="text-xs text-gray-500">or continue with email</span>
-                <span className="h-px flex-1 bg-linear-to-r from-transparent via-purple-500/30 to-transparent" />
-              </div>
+              {/* Divider - only show if magic link is enabled */}
+              {magicLinkEnabled && (
+                <div className="flex items-center gap-3">
+                  <span className="h-px flex-1 bg-linear-to-r from-transparent via-purple-500/30 to-transparent" />
+                  <span className="text-xs text-gray-500">or continue with email</span>
+                  <span className="h-px flex-1 bg-linear-to-r from-transparent via-purple-500/30 to-transparent" />
+                </div>
+              )}
             </>
           )}
 
-          {availableProviders.length === 0 && (
+          {availableProviders.length === 0 && magicLinkEnabled && (
             <p className="text-center text-sm text-gray-500">
               Sign in with your email below
             </p>
           )}
+
+          {availableProviders.length === 0 && !magicLinkEnabled && (
+            <p className="text-center text-sm text-red-400">
+              No authentication providers configured. Please contact support.
+            </p>
+          )}
         </div>
 
-        {/* Email Input */}
-        <div className="space-y-2">
-          <Label
-            htmlFor="email"
-            className="text-xs font-medium uppercase tracking-wider text-white"
-          >
-            Email Address
-          </Label>
-          <div className="relative">
-            <Mail className="absolute left-3 top-1/2 size-4 -translate-y-1/2 text-gray-300" />
-            <Input
-              id="email"
-              name="email"
-              type="email"
-              placeholder="you@example.com"
-              autoComplete="email"
+        {/* Magic Link Email Form - only show if enabled */}
+        {magicLinkEnabled && (
+          <>
+            {/* Email Input */}
+            <div className="space-y-2">
+              <Label
+                htmlFor="email"
+                className="text-xs font-medium uppercase tracking-wider text-white"
+              >
+                Email Address
+              </Label>
+              <div className="relative">
+                <Mail className="absolute left-3 top-1/2 size-4 -translate-y-1/2 text-gray-300" />
+                <Input
+                  id="email"
+                  name="email"
+                  type="email"
+                  placeholder="you@example.com"
+                  autoComplete="email"
+                  disabled={loading || socialBusy}
+                  className="h-12 border-purple-500/30 bg-neutral-800/50 pl-10 text-gray-100 placeholder:text-gray-600 focus:border-purple-500 focus:bg-neutral-800/70 focus:ring-2 focus:ring-purple-500/20"
+                />
+              </div>
+            </div>
+
+            {/* Info Text */}
+            <p className="text-xs text-gray-200">
+              We'll send you a secure one-time link to sign in instantly—no password needed.
+            </p>
+
+            {/* Submit Button */}
+            <Button
               disabled={loading || socialBusy}
-              className="h-12 border-purple-500/30 bg-neutral-800/50 pl-10 text-gray-100 placeholder:text-gray-600 focus:border-purple-500 focus:bg-neutral-800/70 focus:ring-2 focus:ring-purple-500/20"
-            />
-          </div>
-        </div>
-
-        {/* Info Text */}
-        <p className="text-xs text-gray-200">
-          We'll send you a secure one-time link to sign in instantly—no password needed.
-        </p>
-
-        {/* Submit Button */}
-        <Button
-          disabled={loading || socialBusy}
-          type="submit"
-          className="group relative h-12 w-full overflow-hidden rounded-xl bg-linear-to-r from-purple-600 via-pink-600 to-blue-600 font-semibold text-white shadow-lg shadow-purple-500/50 transition-all hover:shadow-xl hover:shadow-purple-500/60 disabled:opacity-50 disabled:cursor-not-allowed"
-        >
-          <span className="relative z-10 flex items-center justify-center gap-2">
-            {loading ? (
-              <>
-                <Loader2 className="size-5 animate-spin" />
-                Sending magic link...
-              </>
-            ) : (
-              <>
-                <Sparkles className="size-5 transition-transform group-hover:rotate-12" />
-                Send Magic Link
-              </>
-            )}
-          </span>
-          <div className="absolute inset-0 -z-10 bg-linear-to-r from-purple-700 via-pink-700 to-blue-700 opacity-0 transition-opacity group-hover:opacity-100" />
-        </Button>
+              type="submit"
+              className="group relative h-12 w-full overflow-hidden rounded-xl bg-linear-to-r from-purple-600 via-pink-600 to-blue-600 font-semibold text-white shadow-lg shadow-purple-500/50 transition-all hover:shadow-xl hover:shadow-purple-500/60 disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              <span className="relative z-10 flex items-center justify-center gap-2">
+                {loading ? (
+                  <>
+                    <Loader2 className="size-5 animate-spin" />
+                    Sending magic link...
+                  </>
+                ) : (
+                  <>
+                    <Sparkles className="size-5 transition-transform group-hover:rotate-12" />
+                    Send Magic Link
+                  </>
+                )}
+              </span>
+              <div className="absolute inset-0 -z-10 bg-linear-to-r from-purple-700 via-pink-700 to-blue-700 opacity-0 transition-opacity group-hover:opacity-100" />
+            </Button>
+          </>
+        )}
 
         {/* Footer */}
         <div className="space-y-2 pt-4 text-center text-xs italic text-gray-400">

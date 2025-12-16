@@ -1,8 +1,36 @@
-# Dynamic Social Auth Providers
+# Dynamic Social Auth Providers & Optional Magic Link
 
-CV99X now supports **fully dynamic social authentication providers**. Simply add environment variables to enable new OAuth providers—no code changes required!
+CV99X supports **fully dynamic social authentication providers** and **optional magic link authentication**. Simply adjust environment variables to configure your authentication methods—no code changes required!
 
-## How It Works
+## 🔐 Authentication Configuration
+
+### Magic Link (Optional)
+
+Magic link authentication can be toggled on or off via environment variable:
+
+```env
+# Enable magic link authentication
+MAGIC_LINK="TRUE"
+
+# Disable magic link authentication (only social OAuth)
+MAGIC_LINK="FALSE"
+```
+
+**When enabled (`MAGIC_LINK="TRUE"`):**
+
+- Users see an email input field
+- Magic link emails are sent via Resend
+- Requires `RESEND_API_KEY` and `SEND_EMAIL_FROM` configured
+
+**When disabled (`MAGIC_LINK="FALSE"` or not set):**
+
+- Email form is hidden
+- Only social OAuth buttons are displayed
+- Email configuration not required
+
+### Social OAuth (Baseline)
+
+**At least one OAuth provider (preferably Google) should be configured as the baseline.**
 
 The system automatically:
 
@@ -26,6 +54,61 @@ The system automatically:
 - **Dropbox**
 - **Twitch**
 - **Apple** (requires 4 env vars)
+
+## 📋 Configuration Examples
+
+### Option 1: Social OAuth Only (Recommended)
+
+Best for production apps where you want users to authenticate with existing accounts:
+
+```env
+# Disable magic link
+MAGIC_LINK="FALSE"
+
+# Configure Google as baseline
+GOOGLE_CLIENT_ID="your_google_client_id"
+GOOGLE_CLIENT_SECRET="your_google_client_secret"
+
+# Optional: Add more providers
+GITHUB_CLIENT_ID="your_github_client_id"
+GITHUB_CLIENT_SECRET="your_github_client_secret"
+```
+
+### Option 2: Magic Link Only
+
+Best for simple apps or when you want to own the full authentication flow:
+
+```env
+# Enable magic link
+MAGIC_LINK="TRUE"
+
+# Configure email sending
+RESEND_API_KEY="re_xxxxx"
+SEND_EMAIL_FROM="noreply@yourdomain.com"
+
+# No OAuth providers configured
+```
+
+### Option 3: Both Magic Link + Social OAuth (Most Flexible)
+
+Best for maximum user flexibility:
+
+```env
+# Enable magic link
+MAGIC_LINK="TRUE"
+
+# Configure email sending
+RESEND_API_KEY="re_xxxxx"
+SEND_EMAIL_FROM="noreply@yourdomain.com"
+
+# Configure Google as baseline
+GOOGLE_CLIENT_ID="your_google_client_id"
+GOOGLE_CLIENT_SECRET="your_google_client_secret"
+
+# Optional: Add more providers
+LINKEDIN_CLIENT_ID="your_linkedin_client_id"
+LINKEDIN_CLIENT_SECRET="your_linkedin_client_secret"
+```
 
 ## Adding a Provider
 

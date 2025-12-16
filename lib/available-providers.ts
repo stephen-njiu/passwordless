@@ -75,3 +75,12 @@ export function getProviderName(provider: Provider): string {
   const config = PROVIDER_CONFIGS.find(p => p.id === provider);
   return config?.name || provider.charAt(0).toUpperCase() + provider.slice(1);
 }
+
+/**
+ * Check if magic link authentication is enabled
+ * Requires MAGIC_LINK="TRUE" in environment variables
+ */
+export function isMagicLinkEnabled(): boolean {
+  const magicLinkEnv = process.env.MAGIC_LINK?.toUpperCase();
+  return magicLinkEnv === "TRUE";
+}

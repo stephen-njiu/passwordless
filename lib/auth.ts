@@ -59,6 +59,13 @@ function buildSocialProviders() {
 
   return Object.fromEntries(entries) as any;
 }
+
+// Check if magic link should be enabled
+function isMagicLinkEnabled(): boolean {
+  const magicLinkEnv = process.env.MAGIC_LINK?.toUpperCase();
+  return magicLinkEnv === "TRUE";
+}
+
 export const auth = betterAuth({
   database: prismaAdapter(prisma, {
     provider: "postgresql", // or "mysql", "postgresql", ...etc
@@ -73,7 +80,7 @@ export const auth = betterAuth({
     emailAndPassword: {
         enabled: false,
     },
-  plugins: [
+  plugins: isMagicLinkEnabled() ? [
     magicLink({
       sendMagicLink: async ({ email, url }) => {
         const from = process.env.SEND_EMAIL_FROM;
@@ -171,5 +178,5 @@ export const auth = betterAuth({
         }
       },
     }),
-  ],
+  ] : [], // Empty array if magic link is disabled
 });

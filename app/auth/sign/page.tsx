@@ -1,9 +1,10 @@
 import CV99XAuthForm from "@/components/auth/CV99XAuthForm";
 import Image from "next/image";
-import { getAvailableProviders } from "@/lib/available-providers";
+import { getAvailableProviders, isMagicLinkEnabled } from "@/lib/available-providers";
 
 export default async function SignPage() {
   const availableProviders = getAvailableProviders();
+  const magicLinkEnabled = isMagicLinkEnabled();
 
   return (
     <div className="relative min-h-screen w-full overflow-hidden bg-neutral-900">
@@ -49,9 +50,12 @@ export default async function SignPage() {
         </div>
 
         {/* Auth Form */}
-        <CV99XAuthForm availableProviders={availableProviders} />
+        <CV99XAuthForm 
+          availableProviders={availableProviders} 
+          magicLinkEnabled={magicLinkEnabled}
+        />
 
-        {/* Footer */}
+        {/* Footer Text */}
         <div className="mt-12 text-center">
           <p className="text-xs text-gray-600">
             © 2025 CV99X. Crafting your perfect resume with AI.

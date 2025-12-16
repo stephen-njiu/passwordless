@@ -32,7 +32,7 @@ export default function RootLayout({
       >
         {children}
         <Toaster 
-          position="top-center"
+          position="top-right"
           richColors
           closeButton
         />
