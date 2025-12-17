@@ -33,7 +33,7 @@ A Next.js 15+ authentication system with **optional passwordless magic link** an
 
 ```bash
 git clone <your-repo-url>
-cd cv99x-dep2
+cd passwordless
 npm install
 ```
 
