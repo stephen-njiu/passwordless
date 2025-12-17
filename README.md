@@ -32,7 +32,7 @@ A Next.js 15+ authentication system with **optional passwordless magic link** an
 ### 1. Clone & Install
 
 ```bash
-git clone <your-repo-url>
+git clone https://github.com/stephen-njiu/passwordless.git
 cd passwordless
 npm install
 ```
