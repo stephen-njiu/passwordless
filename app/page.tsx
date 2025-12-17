@@ -54,7 +54,7 @@ export default function HomePage() {
 
         {/* Footer */}
         <p className="mt-16 text-center text-xs text-gray-600">
-          Premium Authentication Template
+          Passwordless Authentication Template
         </p>
       </div>
     </div>
