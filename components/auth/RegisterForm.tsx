@@ -8,9 +8,10 @@ import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import { authClient } from "@/lib/auth-client";
+import type { Provider } from "@/lib/available-providers";
 
 
-export default function RegisterForm() {
+export default function RegisterForm({ availableProviders = [] }: { availableProviders?: Provider[] }) {
   const [loading, setLoading] = useState(false);
   const [socialBusy, setSocialBusy] = useState(false);
   const router = useRouter();
@@ -75,7 +76,7 @@ export default function RegisterForm() {
       </div>
       {/* Social providers */}
       <div className="space-y-2">
-        <SocialSignIn disabled={loading} onBusyChange={setSocialBusy} />
+        <SocialSignIn providers={availableProviders} disabled={loading} onBusyChange={setSocialBusy} />
         <div className="flex items-center gap-3 text-[10px] text-zinc-500">
           <span className="h-px flex-1 bg-zinc-700" />
           <span>or continue with email</span>

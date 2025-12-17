@@ -21,12 +21,24 @@ MAGIC_LINK="FALSE"
 - Users see an email input field
 - Magic link emails are sent via Resend
 - Requires `RESEND_API_KEY` and `SEND_EMAIL_FROM` configured
+- **Email includes your logo**: Place your logo at `/public/logo.png` (recommended: 120px width)
+- Professional email template with responsive design
 
 **When disabled (`MAGIC_LINK="FALSE"` or not set):**
 
 - Email form is hidden
 - Only social OAuth buttons are displayed
 - Email configuration not required
+
+**📧 Customizing Magic Link Emails:**
+
+To brand your magic link emails:
+
+1. Place your logo at `/public/logo.png`
+2. Recommended dimensions: 120px width (height auto-scales)
+3. Supported formats: PNG, JPG, SVG
+4. Logo appears in email header with gradient background
+5. Update `NEXT_PUBLIC_BASE_URL` in `.env` for production (logo URL resolution)
 
 ### Social OAuth (Baseline)
 
@@ -87,6 +99,8 @@ RESEND_API_KEY="re_xxxxx"
 SEND_EMAIL_FROM="noreply@yourdomain.com"
 
 # No OAuth providers configured
+
+# Don't forget: Add your logo to /public/logo.png for branded emails!
 ```
 
 ### Option 3: Both Magic Link + Social OAuth (Most Flexible)
@@ -108,6 +122,8 @@ GOOGLE_CLIENT_SECRET="your_google_client_secret"
 # Optional: Add more providers
 LINKEDIN_CLIENT_ID="your_linkedin_client_id"
 LINKEDIN_CLIENT_SECRET="your_linkedin_client_secret"
+
+# Don't forget: Add your logo to /public/logo.png for branded emails!
 ```
 
 ## Adding a Provider

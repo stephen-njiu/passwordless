@@ -1,4 +1,4 @@
-# CV99X - Premium Authentication Template
+# CV99X - Passwordless Authentication Template
 
 A Next.js 15+ authentication system with **optional passwordless magic link** and **dynamic social OAuth providers**, styled with a futuristic CV99X premium theme.
 
@@ -67,7 +67,11 @@ MAGIC_LINK="TRUE"
 # Get from: https://resend.com/api-keys
 RESEND_API_KEY="re_xxxxxxxxxxxxx"
 SEND_EMAIL_FROM="support@cv99x.com"  # Use your verified domain
-Change logo.png  in /public/logo.png to your custom logo.
+
+# IMPORTANT: Place your logo at /public/logo.png
+# This logo will appear in magic link emails sent to users
+# Recommended size: 120px width (height auto-scales)
+# Supported formats: PNG, JPG, SVG
 
 # ===================================
 # OAUTH PROVIDERS (At least one required, especially Google as baseline)
@@ -175,6 +179,13 @@ When enabled:
 2. System sends a magic link via Resend
 3. User clicks link → automatically signed in
 4. No password required!
+
+**📧 Email Branding:**
+
+- Magic link emails include your logo from `/public/logo.png`
+- Professional email template with gradient header
+- Responsive design for all email clients
+- **To customize**: Replace `/public/logo.png` with your logo (recommended: 120px width)
 
 When disabled (`MAGIC_LINK="FALSE"` or not set):
 
